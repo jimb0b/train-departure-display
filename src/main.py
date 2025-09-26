@@ -500,6 +500,7 @@ def getVersionDate():
     # Convert the timestamp to a readable datetime object
     return datetime.fromtimestamp(modification_timestamp).strftime('%d %b %Y')
 
+
 @app.route('/stop_display', methods=['POST'])
 def stop_webhook():
     data = request.get_json()  # Optional: read webhook payload
@@ -509,6 +510,7 @@ def stop_webhook():
     device.clear()
     return jsonify(), 200
 
+
 @app.route('/start_display', methods=['POST'])
 def start_webhook():
     data = request.get_json()  # Optional: read webhook payload
@@ -517,8 +519,10 @@ def start_webhook():
     displayOn = True
     return jsonify(), 200
 
+
 def run_server():
     app.run(port=5000)
+
 
 try:
     print('Starting Train Departure Display v' + getVersionNumber())
