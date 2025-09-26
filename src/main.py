@@ -23,6 +23,7 @@ import socket, re, uuid
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
+displayOn = True
 
 def makeFont(name, size):
     font_path = os.path.abspath(
@@ -498,15 +499,22 @@ def getVersionDate():
     # Convert the timestamp to a readable datetime object
     return datetime.fromtimestamp(modification_timestamp).strftime('%d %b %Y')
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    # Get the JSON data sent by the external service
-    data = request.get_json()
-    print("Received webhook:", data)
+@app.route('/stop_display', methods=['POST'])
+def stop_webhook():
+    data = request.get_json()  # Optional: read webhook payload
+    print("Received /stop_display webhook:", data)
+    global displayOn
+    displayOn = False
+    device.clear()
+    return jsonify(), 200
 
-    # Process the data (you can add your logic here)
-    # Example: respond with a success message
-    return jsonify({"status": "success", "received": data}), 200
+@app.route('/start_display', methods=['POST'])
+def start_webhook():
+    data = request.get_json()  # Optional: read webhook payload
+    print("Received /start_display webhook:", data)
+    global displayOn
+    displayOn = True
+    return jsonify(), 200
 
 
 try:
@@ -567,7 +575,7 @@ try:
     app.run(host='0.0.0.0', port=5000)
     while True:
         with regulator:
-            if len(blankHours) == 2 and isRun(blankHours[0], blankHours[1]):
+            if (len(blankHours) == 2 and isRun(blankHours[0], blankHours[1])) or displayOn is False:
                 device.clear()
                 if config['dualScreen']:
                     device1.clear()
