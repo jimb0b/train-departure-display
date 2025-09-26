@@ -521,7 +521,7 @@ def start_webhook():
 
 
 def run_server():
-    app.run(port=5000)
+    app.run(host='0.0.0.0', port=5000)
 
 
 try:
