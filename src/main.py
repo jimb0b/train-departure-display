@@ -21,6 +21,7 @@ from luma.core.sprite_system import framerate_regulator
 import socket, re, uuid
 
 from flask import Flask, request, jsonify
+import threading
 
 app = Flask(__name__)
 displayOn = True
@@ -516,6 +517,8 @@ def start_webhook():
     displayOn = True
     return jsonify(), 200
 
+def run_server():
+    app.run(port=5000)
 
 try:
     print('Starting Train Departure Display v' + getVersionNumber())
@@ -572,7 +575,8 @@ try:
     if config['hoursPattern'].match(config['screenBlankHours']):
         blankHours = [int(x) for x in config['screenBlankHours'].split('-')]
 
-    app.run(host='0.0.0.0', port=5000)
+    server_thread = threading.Thread(target=run_server)
+    server_thread.start()
     while True:
         with regulator:
             if (len(blankHours) == 2 and isRun(blankHours[0], blankHours[1])) or displayOn is False:
