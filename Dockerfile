@@ -27,6 +27,6 @@ COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/pytho
 WORKDIR /usr/src/app
 COPY src ./src
 COPY VERSION .
+EXPOSE 5000
 
 CMD ["python3", "src/main.py"]
-EXPOSE 5000
