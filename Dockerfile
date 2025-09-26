@@ -29,3 +29,4 @@ COPY src ./src
 COPY VERSION .
 
 CMD ["python3", "src/main.py"]
+EXPOSE 5000
