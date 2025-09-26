@@ -503,21 +503,19 @@ def getVersionDate():
 
 @app.route('/stop_display', methods=['POST'])
 def stop_webhook():
-    data = request.get_json()  # Optional: read webhook payload
     print("Received /stop_display webhook:", data)
     global displayOn
     displayOn = False
     device.clear()
-    return jsonify(), 200
+    return jsonify("Display stopped"), 200
 
 
 @app.route('/start_display', methods=['POST'])
 def start_webhook():
-    data = request.get_json()  # Optional: read webhook payload
     print("Received /start_display webhook:", data)
     global displayOn
     displayOn = True
-    return jsonify(), 200
+    return jsonify("Display started"), 200
 
 
 def run_server():
