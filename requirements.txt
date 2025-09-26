@@ -4,5 +4,4 @@ requests
 xmltodict
 RPi.GPIO
 spidev
-Flask
-threading
+flask
