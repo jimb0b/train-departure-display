@@ -20,6 +20,10 @@ from luma.core.sprite_system import framerate_regulator
 
 import socket, re, uuid
 
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
 def makeFont(name, size):
     font_path = os.path.abspath(
         os.path.join(
@@ -494,6 +498,17 @@ def getVersionDate():
     # Convert the timestamp to a readable datetime object
     return datetime.fromtimestamp(modification_timestamp).strftime('%d %b %Y')
 
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    # Get the JSON data sent by the external service
+    data = request.get_json()
+    print("Received webhook:", data)
+
+    # Process the data (you can add your logic here)
+    # Example: respond with a success message
+    return jsonify({"status": "success", "received": data}), 200
+
+
 try:
     print('Starting Train Departure Display v' + getVersionNumber())
     config = loadConfig()
@@ -549,6 +564,7 @@ try:
     if config['hoursPattern'].match(config['screenBlankHours']):
         blankHours = [int(x) for x in config['screenBlankHours'].split('-')]
 
+    app.run(host='0.0.0.0', port=5000)
     while True:
         with regulator:
             if len(blankHours) == 2 and isRun(blankHours[0], blankHours[1]):
