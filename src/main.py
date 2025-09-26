@@ -506,7 +506,6 @@ def stop_webhook():
     print("Received /stop_display webhook:", data)
     global displayOn
     displayOn = False
-    device.clear()
     return jsonify("Display stopped"), 200
 
 
